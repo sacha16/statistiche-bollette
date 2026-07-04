@@ -230,10 +230,6 @@
             gap: 0.5rem;
         }
 
-        .package-name span {
-            font-size: 1.2rem;
-        }
-
         .package-list {
             list-style: none;
             display: flex;
@@ -581,15 +577,15 @@
         <div class="package-card eni-package">
             <div class="package-name">🟢 Monogestore Eni</div>
             <ul class="package-list">
-                <li><span>Spesa Luce (2.602 kWh)</span> <span class="val-luce-eni">880,73 €/anno</span></li>
+                <li><span>Spesa Luce (2.602 kWh)</span> <span class="val-luce-eni">886,73 €/anno</span></li>
                 <li><span>Spesa Gas (media ~84 Smc)</span> <span class="val-gas-eni">349,03 €/anno</span></li>
             </ul>
             <div class="package-total">
                 <span class="package-total-label">Spesa Totale Annua</span>
-                <span id="totEni" class="package-total-value">1229,76 €</span>
+                <span id="totEni" class="package-total-value">1235,76 €</span>
             </div>
-            <div id="subEni" class="savings-alert" style="color: var(--text-secondary);">
-                Differenza rispetto a Octopus: -4,62 €/anno
+            <div id="subEni" class="savings-alert" style="color: var(--accent-red);">
+                Differenza rispetto a Octopus: +1,38 €/anno
             </div>
         </div>
 
@@ -604,8 +600,8 @@
                 <span class="package-total-label">Spesa Totale Annua</span>
                 <span id="totOct" class="package-total-value">1234,38 €</span>
             </div>
-            <div id="subOct" class="savings-alert" style="color: var(--accent-red);">
-                Opzione più costosa
+            <div id="subOct" class="savings-alert" style="color: var(--text-secondary);">
+                Differenza rispetto a Eni: -1,38 €/anno
             </div>
         </div>
 
@@ -614,15 +610,15 @@
             <span class="package-badge">Consigliata (Mista)</span>
             <div class="package-name">🔮 Configurazione Mista</div>
             <ul class="package-list">
-                <li><span>Luce con Eni</span> <span class="val-luce-eni" style="color: var(--accent-luce);">880,73 €/anno</span></li>
+                <li><span>Luce con Eni</span> <span class="val-luce-eni" style="color: var(--accent-luce);">886,73 €/anno</span></li>
                 <li><span>Gas con Octopus</span> <span class="val-gas-oct" style="color: var(--accent-gas);">314,71 €/anno</span></li>
             </ul>
             <div class="package-total">
                 <span class="package-total-label">Spesa Totale Annua</span>
-                <span id="totSplit" class="package-total-value">1195,44 €</span>
+                <span id="totSplit" class="package-total-value">1201,44 €</span>
             </div>
             <div id="subSplit" class="savings-alert">
-                ✨ Risparmio di ben 34,32 €/anno rispetto a Eni e 38,94 €/anno rispetto a Octopus!
+                ✨ Risparmio di ben 34,32 €/anno rispetto a Eni e 32,94 €/anno rispetto a Octopus!
             </div>
         </div>
     </div>
@@ -645,14 +641,14 @@
                     <h4 class="comp-title">🟢 Eni Plenitude</h4>
                     <ul class="comp-details-list">
                         <li><span>Tariffa Monoraria</span> <span class="lbl-luce-price">0,0900 €/kWh</span></li>
-                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">9,00 €/mese</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>108,00 €</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">9,50 €/mese</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>114,00 €</span></li>
                         <li class="comp-only" style="display: none;"><span>Costo Energia Annuo</span> <span>234,18 €</span></li>
                         <li class="real-only"><span>Costi Regolati e Tasse (Stima)</span> <span>538,55 €</span></li>
                     </ul>
                     <div class="comp-total-box">
                         <span class="comp-total-label">Spesa Totale Annua</span>
-                        <span id="totLuceEni" class="comp-total-value">880,73 €</span>
+                        <span id="totLuceEni" class="comp-total-value">886,73 €</span>
                     </div>
                 </div>
 
@@ -695,7 +691,7 @@
                     </div>
                     <div class="kpi-card">
                         <span class="kpi-label">Costo Medio Mensile (Eni)</span>
-                        <span id="kpiLuceEni" class="kpi-value">73,39 €</span>
+                        <span id="kpiLuceEni" class="kpi-value">73,89 €</span>
                     </div>
                     <div class="kpi-card">
                         <span class="kpi-label">Costo Medio Mensile (Octopus)</span>
@@ -706,9 +702,9 @@
                 <div class="formula-box luce-theme-border">
                     <div class="formula-title">Punto di Pareggio (Luce)</div>
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        La tariffa Eni (fissi alti, kwh basso) diventa più conveniente se consumi più di 1.250 kWh/anno.
+                        La tariffa Eni (fissi alti, kwh basso) diventa più conveniente se consumi più di 1.458 kWh/anno.
                     </p>
-                    <div class="formula-text">0.09 * x + 108 = 0.1188 * x + 72<br>x = 1.250 kWh/anno</div>
+                    <div class="formula-text">0.09 * x + 114 = 0.1188 * x + 72<br>x = 1.458,33 kWh/anno</div>
                 </div>
             </div>
         </div>
@@ -721,7 +717,7 @@
                         <tr>
                             <th>Bimestre</th>
                             <th>Consumo (kWh)</th>
-                            <th>Eni (0.09€/kWh + 9€/mese)</th>
+                            <th>Eni (0.09€/kWh + 9.5€/mese)</th>
                             <th>Octopus (0.1188€/kWh + 6€/mese)</th>
                             <th>Differenza (Eni - Octopus)</th>
                             <th>Esito conveniente</th>
@@ -856,7 +852,7 @@
     const REG_COST_GAS_YEAR = 206.59;
     const REG_COST_GAS_QUAD = 206.59 / 3; // 68.86 per bill
     
-    let currentMode = 'real'; // 'real' is default now
+    let currentMode = 'real'; // 'real' is default
 
     // Real values for Luce
     const luceConsumi = [420, 463, 414, 405, 448, 452];
@@ -912,8 +908,8 @@
         const regLuceBim = isReal ? REG_COST_LUCE_BIM : 0;
         const regGasQuad = isReal ? REG_COST_GAS_QUAD : 0;
         
-        // 1. Luce Summary
-        const luceEniTot = 342.18 + regLuce;
+        // 1. Luce Summary (Eni fixed is 9.5€/month, so 114€/year)
+        const luceEniTot = 348.18 + regLuce;
         const luceOctTot = 381.12 + regLuce;
         document.getElementById('totLuceEni').innerText = luceEniTot.toFixed(2) + ' €';
         document.getElementById('totLuceOct').innerText = luceOctTot.toFixed(2) + ' €';
@@ -929,25 +925,26 @@
         document.getElementById('kpiGasOct').innerText = (gasOctTot / 12).toFixed(2) + ' €';
 
         // 3. Package Grid Values
-        document.querySelectorAll('.val-luce-eni').forEach(el => el.innerText = (342.18 + regLuce).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-luce-eni').forEach(el => el.innerText = (348.18 + regLuce).toFixed(2) + ' €/anno');
         document.querySelectorAll('.val-luce-oct').forEach(el => el.innerText = (381.12 + regLuce).toFixed(2) + ' €/anno');
         document.querySelectorAll('.val-gas-eni').forEach(el => el.innerText = (142.44 + regGas).toFixed(2) + ' €/anno');
         document.querySelectorAll('.val-gas-oct').forEach(el => el.innerText = (108.12 + regGas).toFixed(2) + ' €/anno');
         
-        const totEni = 484.62 + regLuce + regGas;
+        const totEni = 490.62 + regLuce + regGas;
         const totOct = 489.24 + regLuce + regGas;
-        const totSplit = 450.30 + regLuce + regGas;
+        const totSplit = 456.30 + regLuce + regGas;
         
         document.getElementById('totEni').innerText = totEni.toFixed(2) + ' €';
         document.getElementById('totOct').innerText = totOct.toFixed(2) + ' €';
         document.getElementById('totSplit').innerText = totSplit.toFixed(2) + ' €';
         
         // Package difference text
-        document.getElementById('subEni').innerText = `Differenza rispetto a Octopus: ${(totEni - totOct).toFixed(2)} €/anno`;
+        document.getElementById('subEni').innerText = `Differenza rispetto a Octopus: +${(totEni - totOct).toFixed(2)} €/anno`;
+        document.getElementById('subOct').innerText = `Differenza rispetto a Eni: ${(totOct - totEni).toFixed(2)} €/anno`;
         document.getElementById('subSplit').innerText = `✨ Risparmio di ben ${(totEni - totSplit).toFixed(2)} €/anno rispetto a Eni e ${(totOct - totSplit).toFixed(2)} €/anno rispetto a Octopus!`;
 
         // 4. Tables Render
-        // Render Luce Table
+        // Render Luce Table (Eni fixed is 9.5€/month, so 19€/bimestre)
         const tbodyLuce = document.querySelector('#tableLuce tbody');
         tbodyLuce.innerHTML = '';
         let sumConsumi = 0;
@@ -956,7 +953,7 @@
         
         for (let i = 0; i < luceConsumi.length; i++) {
             const kwh = luceConsumi[i];
-            const costA = kwh * 0.09 + 9 * 2 + regLuceBim;
+            const costA = kwh * 0.09 + 9.5 * 2 + regLuceBim;
             const costB = kwh * 0.1188 + 6 * 2 + regLuceBim;
             const diff = costA - costB;
             sumConsumi += kwh;
@@ -1043,8 +1040,8 @@
         `;
 
         // Update Charts data
-        // Luce Chart
-        luceChart.data.datasets[0].data = luceConsumi.map(kwh => kwh * 0.09 + 9 * 2 + regLuceBim);
+        // Luce Chart (Eni is 9.5€/month fixed, so 19€/bimestre)
+        luceChart.data.datasets[0].data = luceConsumi.map(kwh => kwh * 0.09 + 9.5 * 2 + regLuceBim);
         luceChart.data.datasets[1].data = luceConsumi.map(kwh => kwh * 0.1188 + 6 * 2 + regLuceBim);
         luceChart.update();
 
@@ -1064,7 +1061,7 @@
             labels: luceBimestri,
             datasets: [
                 {
-                    label: 'Eni (0.09€/kWh + 9€/mese)',
+                    label: 'Eni (0.09€/kWh + 9.5€/mese)',
                     data: [],
                     backgroundColor: 'rgba(0, 242, 254, 0.6)',
                     borderColor: 'rgba(0, 242, 254, 1)',
