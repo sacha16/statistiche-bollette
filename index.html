@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiche e Confronto Bollette</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #161e31;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-luce: #00f2fe;
+            --accent-luce-glow: rgba(0, 242, 254, 0.15);
+            --accent-gas: #ff9900;
+            --accent-gas-glow: rgba(255, 153, 0, 0.15);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.15);
+            --btn-hover: #1e293b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1.5rem;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-luce), var(--accent-gas));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #0b0f19;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+        }
+
+        /* Mode Switcher for pricing type */
+        .mode-switcher-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .mode-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .mode-buttons {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+        }
+
+        .mode-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .mode-btn.active {
+            background: var(--text-primary);
+            color: #0b0f19;
+        }
+
+        /* Alert Box */
+        .info-alert {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .info-alert strong {
+            color: var(--text-primary);
+        }
+
+        /* Package Section */
+        .package-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .package-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .package-card.eni-package:hover {
+            border-color: var(--accent-luce);
+            box-shadow: 0 10px 30px var(--accent-luce-glow);
+        }
+
+        .package-card.octopus-package:hover {
+            border-color: var(--accent-gas);
+            box-shadow: 0 10px 30px var(--accent-gas-glow);
+        }
+
+        .package-card.split-package {
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.05);
+        }
+
+        .package-card.split-package:hover {
+            box-shadow: 0 10px 30px var(--accent-purple-glow);
+        }
+
+        .package-badge {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .package-name {
+            font-size: 1.4rem;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .package-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .package-list li {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .package-list li span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .package-total {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .split-package .package-total {
+            background: rgba(168, 85, 247, 0.05);
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .package-total-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .package-total-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .split-package .package-total-value {
+            color: var(--accent-purple);
+        }
+
+        .savings-alert {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #0b0f19;
+            background: var(--text-primary);
+        }
+
+        /* Dashboard Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Layouts */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 1.5rem;
+        }
+
+        .glass-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+
+        /* Direct Comparison Cards */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comp-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .comp-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .comp-card.recommended {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.08);
+        }
+
+        .comp-card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .comp-title {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comp-details-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .comp-details-list li {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.4rem;
+        }
+
+        .comp-details-list li span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .comp-total-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comp-total-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .comp-total-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .recommended .comp-total-value {
+            color: var(--accent-green);
+        }
+
+        /* Verdict Banner */
+        .verdict-banner {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .verdict-banner.luce-banner {
+            border-left: 4px solid var(--accent-luce);
+        }
+
+        .verdict-banner.gas-banner {
+            border-left: 4px solid var(--accent-gas);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: rgba(255,255,255,0.02);
+            border-left: 4px solid var(--text-secondary);
+            padding: 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 1.5rem;
+        }
+
+        .luce-theme-border { border-left-color: var(--accent-luce); }
+        .gas-theme-border { border-left-color: var(--accent-gas); }
+
+        .formula-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .formula-text {
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="brand-container">
+            <div class="logo-icon">📊</div>
+            <div class="brand">Utility Analisi & Tariffe</div>
+        </div>
+        <div class="date-badge">Confronto Completo Eni vs Octopus</div>
+    </header>
+
+    <!-- Pricing Mode Switcher -->
+    <div class="mode-switcher-container">
+        <div>
+            <div class="mode-title">Seleziona Tipo di Visualizzazione Costi:</div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                Il costo comparativo mostra solo le quote fisse e variabili del fornitore. Il costo reale stimato include anche tasse e oneri di rete statali (uguali per entrambi).
+            </p>
+        </div>
+        <div class="mode-buttons">
+            <button id="btnComp" class="mode-btn active" onclick="switchPriceMode('comp')">Solo Quota Competitiva</button>
+            <button id="btnReal" class="mode-btn" onclick="switchPriceMode('real')">Costo Reale in Bolletta (Stima Finita)</button>
+        </div>
+    </div>
+
+    <div class="info-alert">
+        ℹ️ <strong>Nota sulla composizione dei costi:</strong> Le bollette reali includono spese regolate dall'Autorità (ARERA) e dallo Stato: <strong>spese di trasporto contatore, oneri di sistema, accise, IVA e Canone RAI</strong>. Questi costi sono <strong>identici per qualsiasi fornitore</strong> e incidono per circa <strong>538,55 €/anno sulla Luce</strong> e circa <strong>206,59 €/anno sul Gas</strong>. Nelle tabelle sottostanti puoi decidere se includerli o meno per vedere il totale effettivo che pagherai.
+    </div>
+
+    <!-- Package Comparison Section -->
+    <h3 class="package-title">⚡🔥 Confronto Pacchetto Completo (Luce + Gas)</h3>
+    <div class="package-grid">
+        <!-- Tutto Eni -->
+        <div class="package-card eni-package">
+            <div class="package-name">🟢 Monogestore Eni</div>
+            <ul class="package-list">
+                <li><span>Spesa Luce (2.602 kWh)</span> <span class="val-luce-eni">342,18 €/anno</span></li>
+                <li><span>Spesa Gas (media ~84 Smc)</span> <span class="val-gas-eni">142,44 €/anno</span></li>
+            </ul>
+            <div class="package-total">
+                <span class="package-total-label">Spesa Totale Annua</span>
+                <span id="totEni" class="package-total-value">484,62 €</span>
+            </div>
+            <div id="subEni" class="savings-alert" style="color: var(--text-secondary);">
+                Differenza rispetto a Octopus: -4,62 €/anno
+            </div>
+        </div>
+
+        <!-- Tutto Octopus -->
+        <div class="package-card octopus-package">
+            <div class="package-name">🐙 Monogestore Octopus</div>
+            <ul class="package-list">
+                <li><span>Spesa Luce (2.602 kWh)</span> <span class="val-luce-oct">381,12 €/anno</span></li>
+                <li><span>Spesa Gas (media ~84 Smc)</span> <span class="val-gas-oct">108,12 €/anno</span></li>
+            </ul>
+            <div class="package-total">
+                <span class="package-total-label">Spesa Totale Annua</span>
+                <span id="totOct" class="package-total-value">489,24 €</span>
+            </div>
+            <div id="subOct" class="savings-alert" style="color: var(--accent-red);">
+                Opzione più costosa
+            </div>
+        </div>
+
+        <!-- Split Config -->
+        <div class="package-card split-package">
+            <span class="package-badge">Consigliata (Mista)</span>
+            <div class="package-name">🔮 Configurazione Mista</div>
+            <ul class="package-list">
+                <li><span>Luce con Eni</span> <span class="val-luce-eni" style="color: var(--accent-luce);">342,18 €/anno</span></li>
+                <li><span>Gas con Octopus</span> <span class="val-gas-oct" style="color: var(--accent-gas);">108,12 €/anno</span></li>
+            </ul>
+            <div class="package-total">
+                <span class="package-total-label">Spesa Totale Annua</span>
+                <span id="totSplit" class="package-total-value">450,30 €</span>
+            </div>
+            <div id="subSplit" class="savings-alert">
+                ✨ Risparmio di ben 34,32 €/anno rispetto a Eni e 38,94 €/anno rispetto a Octopus!
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('luce', this)">⚡ Luce (Elettricità)</button>
+        <button class="tab-btn" onclick="switchTab('gas', this)">🔥 Gas Naturale</button>
+    </div>
+
+    <!-- Luce Section -->
+    <div id="luce" class="tab-content active">
+        <!-- Direct Comparison Section -->
+        <div class="glass-card">
+            <h3>⚖️ Dettaglio Parametri Luce (Su 2.602 kWh/anno)</h3>
+            <div class="comparison-container">
+                <!-- Eni Card -->
+                <div class="comp-card recommended">
+                    <span class="comp-card-badge">Più Conveniente</span>
+                    <h4 class="comp-title">🟢 Eni Plenitude</h4>
+                    <ul class="comp-details-list">
+                        <li><span>Tariffa Monoraria</span> <span class="lbl-luce-price">0,0900 €/kWh</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">9,00 €/mese</span></li>
+                        <li class="comp-only"><span>Costo Fisso Annuo</span> <span>108,00 €</span></li>
+                        <li class="comp-only"><span>Costo Energia Annuo</span> <span>234,18 €</span></li>
+                        <li class="real-only" style="display: none;"><span>Costi Regolati e Tasse (Stima)</span> <span>538,55 €</span></li>
+                    </ul>
+                    <div class="comp-total-box">
+                        <span class="comp-total-label">Spesa Totale Annua</span>
+                        <span id="totLuceEni" class="comp-total-value">342,18 €</span>
+                    </div>
+                </div>
+
+                <!-- Octopus Card -->
+                <div class="comp-card">
+                    <h4 class="comp-title">🐙 Octopus Energy</h4>
+                    <ul class="comp-details-list">
+                        <li><span>Tariffa Monoraria</span> <span class="lbl-luce-price">0,1188 €/kWh</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">6,00 €/mese</span></li>
+                        <li class="comp-only"><span>Costo Fisso Annuo</span> <span>72,00 €</span></li>
+                        <li class="comp-only"><span>Costo Energia Annuo</span> <span>309,12 €</span></li>
+                        <li class="real-only" style="display: none;"><span>Costi Regolati e Tasse (Stima)</span> <span>538,55 €</span></li>
+                    </ul>
+                    <div class="comp-total-box">
+                        <span class="comp-total-label">Spesa Totale Annua</span>
+                        <span id="totLuceOct" class="comp-total-value">381,12 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-grid">
+            <div class="glass-card">
+                <h3>📈 Simulazione e Andamento Costi Luce</h3>
+                <div style="position: relative; height: 350px; width: 100%;">
+                    <canvas id="luceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3>📋 Statistiche Chiave (Luce)</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-label">Consumo Annuo</span>
+                        <span class="kpi-value" style="color: var(--accent-luce);">2.602 kWh</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Media Mensile</span>
+                        <span class="kpi-value">216,8 kWh</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Costo Medio Mensile (Eni)</span>
+                        <span id="kpiLuceEni" class="kpi-value">28,51 €</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Costo Medio Mensile (Octopus)</span>
+                        <span id="kpiLuceOct" class="kpi-value">31,76 €</span>
+                    </div>
+                </div>
+
+                <div class="formula-box luce-theme-border">
+                    <div class="formula-title">Punto di Pareggio (Luce)</div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        La tariffa Eni (fissi alti, kwh basso) diventa più conveniente se consumi più di 1.250 kWh/anno.
+                    </p>
+                    <div class="formula-text">0.09 * x + 108 = 0.1188 * x + 72<br>x = 1.250 kWh/anno</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3>📊 Dettaglio Bollette Luce (Periodo 2025-2026)</h3>
+            <div class="table-container">
+                <table id="tableLuce">
+                    <thead>
+                        <tr>
+                            <th>Bimestre</th>
+                            <th>Consumo (kWh)</th>
+                            <th>Eni (0.09€/kWh + 9€/mese)</th>
+                            <th>Octopus (0.1188€/kWh + 6€/mese)</th>
+                            <th>Differenza (Eni - Octopus)</th>
+                            <th>Esito conveniente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic content filled via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gas Section -->
+    <div id="gas" class="tab-content">
+        <!-- Direct Comparison Section -->
+        <div class="glass-card">
+            <h3>⚖️ Dettaglio Parametri Gas (Media su ~84 Smc/anno)</h3>
+            <div class="comparison-container">
+                <!-- Eni Card -->
+                <div class="comp-card">
+                    <h4 class="comp-title">🟢 Eni Plenitude</h4>
+                    <ul class="comp-details-list">
+                        <li><span>Tariffa Gas</span> <span>0,4100 €/Smc</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span>9,00 €/mese</span></li>
+                        <li class="comp-only"><span>Costo Fisso Annuo</span> <span>108,00 €</span></li>
+                        <li class="comp-only"><span>Costo Gas Annuo Medio</span> <span>34,44 €</span></li>
+                        <li class="real-only" style="display: none;"><span>Costi Regolati e Tasse (Stima)</span> <span>206,59 €</span></li>
+                    </ul>
+                    <div class="comp-total-box">
+                        <span class="comp-total-label">Spesa Totale Annua Media</span>
+                        <span id="totGasEni" class="comp-total-value">142,44 €</span>
+                    </div>
+                </div>
+
+                <!-- Octopus Card -->
+                <div class="comp-card recommended">
+                    <span class="comp-card-badge">Più Conveniente</span>
+                    <h4 class="comp-title">🐙 Octopus Energy</h4>
+                    <ul class="comp-details-list">
+                        <li><span>Tariffa Gas</span> <span>0,4300 €/Smc</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span>6,00 €/mese</span></li>
+                        <li class="comp-only"><span>Costo Fisso Annuo</span> <span>72,00 €</span></li>
+                        <li class="comp-only"><span>Costo Gas Annuo Medio</span> <span>36,12 €</span></li>
+                        <li class="real-only" style="display: none;"><span>Costi Regolati e Tasse (Stima)</span> <span>206,59 €</span></li>
+                    </ul>
+                    <div class="comp-total-box">
+                        <span class="comp-total-label">Spesa Totale Annua Media</span>
+                        <span id="totGasOct" class="comp-total-value">108,12 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-grid">
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.75rem;">
+                    <h3>📈 Andamento Costi Gas</h3>
+                    <div style="width: 180px;">
+                        <div class="select-wrapper">
+                            <select id="gasYearSelect" onchange="updateGasYear()">
+                                <option value="all">Tutti gli anni</option>
+                                <option value="year1">Anno 1 (2024-2025)</option>
+                                <option value="year2">Anno 2 (2025-2026)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div style="position: relative; height: 350px; width: 100%;">
+                    <canvas id="gasChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3>📋 Statistiche Chiave (Gas)</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-label">Consumo Medio</span>
+                        <span class="kpi-value" style="color: var(--accent-gas);">84 Smc/anno</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Media Mensile</span>
+                        <span class="kpi-value">7,0 Smc</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Costo Medio Mensile (Eni)</span>
+                        <span id="kpiGasEni" class="kpi-value">11,87 €</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Costo Medio Mensile (Octopus)</span>
+                        <span id="kpiGasOct" class="kpi-value">9,01 €</span>
+                    </div>
+                </div>
+
+                <div class="formula-box gas-theme-border">
+                    <div class="formula-title">Punto di Pareggio (Gas)</div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        La tariffa Octopus (fissi bassi, smc leggermente più alto) conviene se consumi meno di 1.800 Smc/anno.
+                    </p>
+                    <div class="formula-text">0.41 * x + 108 = 0.43 * x + 72<br>x = 1.800 Smc/anno</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3>📊 Dettaglio Bollette Gas (Periodo 2024-2026)</h3>
+            <div class="table-container">
+                <table id="tableGas">
+                    <thead>
+                        <tr>
+                            <th>Anno</th>
+                            <th>Periodo (Quadrimestrale)</th>
+                            <th>Consumo (Smc)</th>
+                            <th>Eni (0.41€/Smc + 9€/m)</th>
+                            <th>Octopus (0.43€/Smc + 6€/m)</th>
+                            <th>Differenza (Eni - Octopus)</th>
+                            <th>Esito conveniente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic content filled via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Constants for Regulated Cost Additions
+    const REG_COST_LUCE_BIM = 538.55 / 6; // 89.76 per bill
+    const REG_COST_GAS_YEAR = 206.59;
+    const REG_COST_GAS_QUAD = 206.59 / 3; // 68.86 per bill
+    
+    let currentMode = 'comp'; // 'comp' or 'real'
+
+    // Real values for Luce
+    const luceConsumi = [420, 463, 414, 405, 448, 452];
+    const luceBimestri = [
+        'Maggio - Giugno 2025',
+        'Luglio - Agosto 2025',
+        'Settembre - Ottobre 2025',
+        'Novembre - Dicembre 2025',
+        'Gennaio - Febbraio 2026',
+        'Marzo - Aprile 2026'
+    ];
+
+    // Real values for Gas
+    const gasConsumi = [21, 6, 68, 20, 12, 41];
+    const gasLabelsAll = ['Mar-Giu 24', 'Lug-Ott 24', 'Nov-Feb 25', 'Mar-Giu 25', 'Lug-Ott 25', 'Nov-Feb 26'];
+    const gasPeriods = [
+        { anno: 'Anno 1', per: 'Marzo - Giugno 2024', smc: 21 },
+        { anno: 'Anno 1', per: 'Luglio - Ottobre 2024', smc: 6 },
+        { anno: 'Anno 1', per: 'Novembre 2024 - Febbraio 2025', smc: 68 },
+        { anno: 'Anno 2', per: 'Marzo - Giugno 2025', smc: 20 },
+        { anno: 'Anno 2', per: 'Luglio - Ottobre 2025', smc: 12 },
+        { anno: 'Anno 2', per: 'Novembre 2025 - Febbraio 2026', smc: 41 }
+    ];
+
+    // Tab switcher
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // Toggle Price Mode
+    function switchPriceMode(mode) {
+        currentMode = mode;
+        document.getElementById('btnComp').classList.toggle('active', mode === 'comp');
+        document.getElementById('btnReal').classList.toggle('active', mode === 'real');
+        
+        // Show/hide specific elements
+        document.querySelectorAll('.comp-only').forEach(el => el.style.display = mode === 'comp' ? '' : 'none');
+        document.querySelectorAll('.real-only').forEach(el => el.style.display = mode === 'real' ? '' : 'none');
+        
+        updateDashboard();
+    }
+
+    // Refresh layout based on mode
+    function updateDashboard() {
+        const isReal = currentMode === 'real';
+        
+        // Regulated additions
+        const regLuce = isReal ? 538.55 : 0;
+        const regGas = isReal ? REG_COST_GAS_YEAR : 0;
+        const regLuceBim = isReal ? REG_COST_LUCE_BIM : 0;
+        const regGasQuad = isReal ? REG_COST_GAS_QUAD : 0;
+        
+        // 1. Luce Summary
+        const luceEniTot = 342.18 + regLuce;
+        const luceOctTot = 381.12 + regLuce;
+        document.getElementById('totLuceEni').innerText = luceEniTot.toFixed(2) + ' €';
+        document.getElementById('totLuceOct').innerText = luceOctTot.toFixed(2) + ' €';
+        document.getElementById('kpiLuceEni').innerText = (luceEniTot / 12).toFixed(2) + ' €';
+        document.getElementById('kpiLuceOct').innerText = (luceOctTot / 12).toFixed(2) + ' €';
+        
+        // 2. Gas Summary
+        const gasEniTot = 142.44 + regGas;
+        const gasOctTot = 108.12 + regGas;
+        document.getElementById('totGasEni').innerText = gasEniTot.toFixed(2) + ' €';
+        document.getElementById('totGasOct').innerText = gasOctTot.toFixed(2) + ' €';
+        document.getElementById('kpiGasEni').innerText = (gasEniTot / 12).toFixed(2) + ' €';
+        document.getElementById('kpiGasOct').innerText = (gasOctTot / 12).toFixed(2) + ' €';
+
+        // 3. Package Grid Values
+        document.querySelectorAll('.val-luce-eni').forEach(el => el.innerText = (342.18 + regLuce).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-luce-oct').forEach(el => el.innerText = (381.12 + regLuce).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-gas-eni').forEach(el => el.innerText = (142.44 + regGas).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-gas-oct').forEach(el => el.innerText = (108.12 + regGas).toFixed(2) + ' €/anno');
+        
+        const totEni = 484.62 + regLuce + regGas;
+        const totOct = 489.24 + regLuce + regGas;
+        const totSplit = 450.30 + regLuce + regGas;
+        
+        document.getElementById('totEni').innerText = totEni.toFixed(2) + ' €';
+        document.getElementById('totOct').innerText = totOct.toFixed(2) + ' €';
+        document.getElementById('totSplit').innerText = totSplit.toFixed(2) + ' €';
+        
+        // Package difference text
+        document.getElementById('subEni').innerText = `Differenza rispetto a Octopus: ${(totEni - totOct).toFixed(2)} €/anno`;
+        document.getElementById('subSplit').innerText = `✨ Risparmio di ben ${(totEni - totSplit).toFixed(2)} €/anno rispetto a Eni e ${(totOct - totSplit).toFixed(2)} €/anno rispetto a Octopus!`;
+
+        // 4. Tables Render
+        // Render Luce Table
+        const tbodyLuce = document.querySelector('#tableLuce tbody');
+        tbodyLuce.innerHTML = '';
+        let sumConsumi = 0;
+        let sumA = 0;
+        let sumB = 0;
+        
+        for (let i = 0; i < luceConsumi.length; i++) {
+            const kwh = luceConsumi[i];
+            const costA = kwh * 0.09 + 9 * 2 + regLuceBim;
+            const costB = kwh * 0.1188 + 6 * 2 + regLuceBim;
+            const diff = costA - costB;
+            sumConsumi += kwh;
+            sumA += costA;
+            sumB += costB;
+            
+            tbodyLuce.innerHTML += `
+                <tr>
+                    <td>${luceBimestri[i]}</td>
+                    <td>${kwh} kWh</td>
+                    <td>${costA.toFixed(2)} €</td>
+                    <td>${costB.toFixed(2)} €</td>
+                    <td class="${diff < 0 ? 'text-green' : 'text-red'}">${diff.toFixed(2)} €</td>
+                    <td><span class="recommendation-badge">${costA < costB ? 'Eni' : 'Octopus'}</span></td>
+                </tr>
+            `;
+        }
+        tbodyLuce.innerHTML += `
+            <tr class="font-bold" style="background: rgba(255,255,255,0.02)">
+                <td>Totale Annuo</td>
+                <td>${sumConsumi} kWh</td>
+                <td>${sumA.toFixed(2)} €</td>
+                <td>${sumB.toFixed(2)} €</td>
+                <td class="text-green">${(sumA - sumB).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Eni</span></td>
+            </tr>
+        `;
+
+        // Render Gas Table
+        const tbodyGas = document.querySelector('#tableGas tbody');
+        tbodyGas.innerHTML = '';
+        let sumGas1 = 0, sumGasA1 = 0, sumGasB1 = 0;
+        let sumGas2 = 0, sumGasA2 = 0, sumGasB2 = 0;
+        
+        for (let i = 0; i < gasPeriods.length; i++) {
+            const gp = gasPeriods[i];
+            const costA = gp.smc * 0.41 + 9 * 4 + regGasQuad;
+            const costB = gp.smc * 0.43 + 6 * 4 + regGasQuad;
+            const diff = costA - costB;
+            
+            if (gp.anno === 'Anno 1') {
+                sumGas1 += gp.smc;
+                sumGasA1 += costA;
+                sumGasB1 += costB;
+            } else {
+                sumGas2 += gp.smc;
+                sumGasA2 += costA;
+                sumGasB2 += costB;
+            }
+            
+            tbodyGas.innerHTML += `
+                <tr class="gas-row-${gp.anno === 'Anno 1' ? 'year1' : 'year2'}">
+                    <td>${gp.anno}</td>
+                    <td>${gp.per}</td>
+                    <td>${gp.smc} Smc</td>
+                    <td>${costA.toFixed(2)} €</td>
+                    <td>${costB.toFixed(2)} €</td>
+                    <td class="${diff < 0 ? 'text-green' : 'text-red'}">${diff > 0 ? '+' : ''}${diff.toFixed(2)} €</td>
+                    <td><span class="recommendation-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border-color: transparent;">${costA < costB ? 'Eni' : 'Octopus'}</span></td>
+                </tr>
+            `;
+        }
+        
+        // Totals Rows
+        tbodyGas.innerHTML += `
+            <tr class="font-bold gas-row-year1" style="background: rgba(255,255,255,0.02)">
+                <td>Totale Anno 1</td>
+                <td>Mar 24 - Feb 25</td>
+                <td>${sumGas1} Smc</td>
+                <td>${sumGasA1.toFixed(2)} €</td>
+                <td>${sumGasB1.toFixed(2)} €</td>
+                <td class="text-red">+${(sumGasA1 - sumGasB1).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Octopus</span></td>
+            </tr>
+            <tr class="font-bold gas-row-year2" style="background: rgba(255,255,255,0.02)">
+                <td>Totale Anno 2</td>
+                <td>Mar 25 - Feb 26</td>
+                <td>${sumGas2} Smc</td>
+                <td>${sumGasA2.toFixed(2)} €</td>
+                <td>${sumGasB2.toFixed(2)} €</td>
+                <td class="text-red">+${(sumGasA2 - sumGasB2).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Octopus</span></td>
+            </tr>
+        `;
+
+        // Update Charts data
+        // Luce Chart
+        luceChart.data.datasets[0].data = luceConsumi.map(kwh => kwh * 0.09 + 9 * 2 + regLuceBim);
+        luceChart.data.datasets[1].data = luceConsumi.map(kwh => kwh * 0.1188 + 6 * 2 + regLuceBim);
+        luceChart.update();
+
+        // Gas Chart
+        updateGasYear();
+    }
+
+    // Chart.js global settings
+    Chart.defaults.color = '#9ca3af';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    // Luce Chart Instance
+    const luceCtx = document.getElementById('luceChart').getContext('2d');
+    const luceChart = new Chart(luceCtx, {
+        type: 'bar',
+        data: {
+            labels: luceBimestri,
+            datasets: [
+                {
+                    label: 'Eni (0.09€/kWh + 9€/mese)',
+                    data: [],
+                    backgroundColor: 'rgba(0, 242, 254, 0.6)',
+                    borderColor: 'rgba(0, 242, 254, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                },
+                {
+                    label: 'Octopus (0.1188€/kWh + 6€/mese)',
+                    data: [],
+                    backgroundColor: 'rgba(239, 68, 68, 0.4)',
+                    borderColor: 'rgba(239, 68, 68, 0.8)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw.toFixed(2) + ' €';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    title: { display: true, text: 'Costo Bolletta (€)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Gas Chart Instance
+    const gasCtx = document.getElementById('gasChart').getContext('2d');
+    const gasChart = new Chart(gasCtx, {
+        type: 'bar',
+        data: {
+            labels: gasLabelsAll,
+            datasets: [
+                {
+                    label: 'Eni (0.41€/Smc + 9€/mese)',
+                    data: [],
+                    backgroundColor: 'rgba(239, 68, 68, 0.4)',
+                    borderColor: 'rgba(239, 68, 68, 0.8)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                },
+                {
+                    label: 'Octopus (0.43€/Smc + 6€/mese)',
+                    data: [],
+                    backgroundColor: 'rgba(255, 153, 0, 0.6)',
+                    borderColor: 'rgba(255, 153, 0, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw.toFixed(2) + ' €';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    title: { display: true, text: 'Costo Bolletta (€)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Update Gas Chart and Rows when changing year selector
+    function updateGasYear() {
+        const val = document.getElementById('gasYearSelect').value;
+        const rowsYear1 = document.querySelectorAll('.gas-row-year1');
+        const rowsYear2 = document.querySelectorAll('.gas-row-year2');
+        const isReal = currentMode === 'real';
+        const regGasQuad = isReal ? REG_COST_GAS_QUAD : 0;
+        
+        const gasDataA = gasConsumi.map(smc => smc * 0.41 + 9 * 4 + regGasQuad);
+        const gasDataB = gasConsumi.map(smc => smc * 0.43 + 6 * 4 + regGasQuad);
+
+        if (val === 'all') {
+            gasChart.data.labels = gasLabelsAll;
+            gasChart.data.datasets[0].data = gasDataA;
+            gasChart.data.datasets[1].data = gasDataB;
+            rowsYear1.forEach(row => row.style.display = '');
+            rowsYear2.forEach(row => row.style.display = '');
+        } else if (val === 'year1') {
+            gasChart.data.labels = ['Mar-Giu 24', 'Lug-Ott 24', 'Nov-Feb 25'];
+            gasChart.data.datasets[0].data = gasDataA.slice(0, 3);
+            gasChart.data.datasets[1].data = gasDataB.slice(0, 3);
+            rowsYear1.forEach(row => row.style.display = '');
+            rowsYear2.forEach(row => row.style.display = 'none');
+        } else if (val === 'year2') {
+            gasChart.data.labels = ['Mar-Giu 25', 'Lug-Ott 25', 'Nov-Feb 26'];
+            gasChart.data.datasets[0].data = gasDataA.slice(3, 6);
+            gasChart.data.datasets[1].data = gasDataB.slice(3, 6);
+            rowsYear1.forEach(row => row.style.display = 'none');
+            rowsYear2.forEach(row => row.style.display = '');
+        }
+        gasChart.update();
+    }
+
+    // Initialize Dashboard
+    updateDashboard();
+</script>
+</body>
+</html>
