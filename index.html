@@ -539,6 +539,155 @@
             font-size: 0.95rem;
             color: var(--text-secondary);
         }
+
+        /* Table custom styling for modern glassmorphism */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--card-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .text-green {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .text-red {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        .recommendation-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Settings panel styling */
+        .settings-panel {
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .settings-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.5rem;
+        }
+
+        .settings-group {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .settings-group:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .provider-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .input-control {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .input-control label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .input-control input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .input-control input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .settings-reset-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .settings-reset-btn:hover {
+            background: var(--accent-red);
+            color: #0b0f19;
+            border-color: var(--accent-red);
+        }
     </style>
 </head>
 <body>
@@ -568,6 +717,78 @@
 
     <div class="info-alert">
         ℹ️ <strong>Nota sulla composizione dei costi:</strong> Le bollette reali includono spese regolate dall'Autorità (ARERA) e dallo Stato: <strong>spese di trasporto contatore, oneri di sistema, accise, IVA e Canone RAI</strong>. Questi costi sono <strong>identici per qualsiasi fornitore</strong> e incidono per circa <strong>538,55 €/anno sulla Luce</strong> e circa <strong>206,59 €/anno sul Gas</strong>. Nelle tabelle sottostanti puoi decidere se includerli o meno per vedere il totale effettivo che pagherai.
+    </div>
+
+    <!-- settings-panel -->
+    <div class="glass-card settings-panel">
+        <h3>⚙️ Modifica Tariffe Offerte</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Inserisci o modifica i parametri economici delle offerte dei due fornitori per aggiornare istantaneamente tutti i conteggi, i grafici e il punto di pareggio. I valori personalizzati vengono salvati in locale nel browser.
+        </p>
+        <div class="settings-grid">
+            <div class="settings-column">
+                <div class="settings-section-title">⚡ Luce (Elettricità)</div>
+                <div class="settings-group">
+                    <div class="provider-label">🟢 Eni Plenitude</div>
+                    <div class="input-row">
+                        <div class="input-control">
+                            <label for="inputLucePriceEni">Prezzo Energia (€/kWh)</label>
+                            <input type="number" id="inputLucePriceEni" step="0.0001" value="0.0900" oninput="handleOfferChange()">
+                        </div>
+                        <div class="input-control">
+                            <label for="inputLuceFixedEni">Quota Fissa (€/mese)</label>
+                            <input type="number" id="inputLuceFixedEni" step="0.10" value="9.50" oninput="handleOfferChange()">
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="provider-label">🐙 Octopus Energy</div>
+                    <div class="input-row">
+                        <div class="input-control">
+                            <label for="inputLucePriceOct">Prezzo Energia (€/kWh)</label>
+                            <input type="number" id="inputLucePriceOct" step="0.0001" value="0.1188" oninput="handleOfferChange()">
+                        </div>
+                        <div class="input-control">
+                            <label for="inputLuceFixedOct">Quota Fissa (€/mese)</label>
+                            <input type="number" id="inputLuceFixedOct" step="0.10" value="6.00" oninput="handleOfferChange()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-column">
+                <div class="settings-section-title">🔥 Gas Naturale</div>
+                <div class="settings-group">
+                    <div class="provider-label">🟢 Eni Plenitude</div>
+                    <div class="input-row">
+                        <div class="input-control">
+                            <label for="inputGasPriceEni">Prezzo Gas (€/Smc)</label>
+                            <input type="number" id="inputGasPriceEni" step="0.0001" value="0.4100" oninput="handleOfferChange()">
+                        </div>
+                        <div class="input-control">
+                            <label for="inputGasFixedEni">Quota Fissa (€/mese)</label>
+                            <input type="number" id="inputGasFixedEni" step="0.10" value="9.00" oninput="handleOfferChange()">
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="provider-label">🐙 Octopus Energy</div>
+                    <div class="input-row">
+                        <div class="input-control">
+                            <label for="inputGasPriceOct">Prezzo Gas (€/Smc)</label>
+                            <input type="number" id="inputGasPriceOct" step="0.0001" value="0.4300" oninput="handleOfferChange()">
+                        </div>
+                        <div class="input-control">
+                            <label for="inputGasFixedOct">Quota Fissa (€/mese)</label>
+                            <input type="number" id="inputGasFixedOct" step="0.10" value="6.00" oninput="handleOfferChange()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-footer" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+            <button class="settings-reset-btn" onclick="resetOffers()">Ripristina Valori Iniziali</button>
+        </div>
     </div>
 
     <!-- Package Comparison Section -->
@@ -607,11 +828,11 @@
 
         <!-- Split Config -->
         <div class="package-card split-package">
-            <span class="package-badge">Consigliata (Mista)</span>
+            <span class="package-badge" id="splitConfigBadge">Consigliata (Mista)</span>
             <div class="package-name">🔮 Configurazione Mista</div>
             <ul class="package-list">
-                <li><span>Luce con Eni</span> <span class="val-luce-eni" style="color: var(--accent-luce);">886,73 €/anno</span></li>
-                <li><span>Gas con Octopus</span> <span class="val-gas-oct" style="color: var(--accent-gas);">314,71 €/anno</span></li>
+                <li><span id="splitLuceLabel">Luce con Eni</span> <span id="splitLuceVal" class="val-luce-eni" style="color: var(--accent-luce);">886,73 €/anno</span></li>
+                <li><span id="splitGasLabel">Gas con Octopus</span> <span id="splitGasVal" class="val-gas-oct" style="color: var(--accent-gas);">314,71 €/anno</span></li>
             </ul>
             <div class="package-total">
                 <span class="package-total-label">Spesa Totale Annua</span>
@@ -636,14 +857,14 @@
             <h3>⚖️ Dettaglio Parametri Luce (Su 2.602 kWh/anno)</h3>
             <div class="comparison-container">
                 <!-- Eni Card -->
-                <div class="comp-card recommended">
-                    <span class="comp-card-badge">Più Conveniente</span>
+                <div class="comp-card recommended" id="cardLuceEni">
+                    <span class="comp-card-badge" id="badgeLuceEni">Più Conveniente</span>
                     <h4 class="comp-title">🟢 Eni Plenitude</h4>
                     <ul class="comp-details-list">
-                        <li><span>Tariffa Monoraria</span> <span class="lbl-luce-price">0,0900 €/kWh</span></li>
-                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">9,50 €/mese</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>114,00 €</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Energia Annuo</span> <span>234,18 €</span></li>
+                        <li><span>Tariffa Monoraria</span> <span id="lblLucePriceEni" class="lbl-luce-price">0,0900 €/kWh</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span id="lblLuceFixedEni" class="lbl-luce-fixed">9,50 €/mese</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span id="lblLuceFixedAnnEni">114,00 €</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Energia Annuo</span> <span id="lblLuceVarAnnEni">234,18 €</span></li>
                         <li class="real-only"><span>Costi Regolati e Tasse (Stima)</span> <span>538,55 €</span></li>
                     </ul>
                     <div class="comp-total-box">
@@ -653,13 +874,14 @@
                 </div>
 
                 <!-- Octopus Card -->
-                <div class="comp-card">
+                <div class="comp-card" id="cardLuceOct">
+                    <span class="comp-card-badge" id="badgeLuceOct" style="display: none;">Più Conveniente</span>
                     <h4 class="comp-title">🐙 Octopus Energy</h4>
                     <ul class="comp-details-list">
-                        <li><span>Tariffa Monoraria</span> <span class="lbl-luce-price">0,1188 €/kWh</span></li>
-                        <li><span>Quota Fissa Mensile</span> <span class="lbl-luce-fixed">6,00 €/mese</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>72,00 €</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Energia Annuo</span> <span>309,12 €</span></li>
+                        <li><span>Tariffa Monoraria</span> <span id="lblLucePriceOct" class="lbl-luce-price">0,1188 €/kWh</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span id="lblLuceFixedOct" class="lbl-luce-fixed">6,00 €/mese</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span id="lblLuceFixedAnnOct">72,00 €</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Energia Annuo</span> <span id="lblLuceVarAnnOct">309,12 €</span></li>
                         <li class="real-only"><span>Costi Regolati e Tasse (Stima)</span> <span>538,55 €</span></li>
                     </ul>
                     <div class="comp-total-box">
@@ -701,10 +923,10 @@
 
                 <div class="formula-box luce-theme-border">
                     <div class="formula-title">Punto di Pareggio (Luce)</div>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <p id="lblBreakEvenLuceText" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                         La tariffa Eni (fissi alti, kwh basso) diventa più conveniente se consumi più di 1.458 kWh/anno.
                     </p>
-                    <div class="formula-text">0.09 * x + 114 = 0.1188 * x + 72<br>x = 1.458,33 kWh/anno</div>
+                    <div id="lblBreakEvenLuceFormula" class="formula-text">0.09 * x + 114 = 0.1188 * x + 72<br>x = 1.458,33 kWh/anno</div>
                 </div>
             </div>
         </div>
@@ -717,8 +939,8 @@
                         <tr>
                             <th>Bimestre</th>
                             <th>Consumo (kWh)</th>
-                            <th>Eni (0.09€/kWh + 9.5€/mese)</th>
-                            <th>Octopus (0.1188€/kWh + 6€/mese)</th>
+                            <th id="thLuceEni">Eni (0.09€/kWh + 9.5€/mese)</th>
+                            <th id="thLuceOct">Octopus (0.1188€/kWh + 6€/mese)</th>
                             <th>Differenza (Eni - Octopus)</th>
                             <th>Esito conveniente</th>
                         </tr>
@@ -738,13 +960,14 @@
             <h3>⚖️ Dettaglio Parametri Gas (Media su ~84 Smc/anno)</h3>
             <div class="comparison-container">
                 <!-- Eni Card -->
-                <div class="comp-card">
+                <div class="comp-card" id="cardGasEni">
+                    <span class="comp-card-badge" id="badgeGasEni" style="display: none;">Più Conveniente</span>
                     <h4 class="comp-title">🟢 Eni Plenitude</h4>
                     <ul class="comp-details-list">
-                        <li><span>Tariffa Gas</span> <span>0,4100 €/Smc</span></li>
-                        <li><span>Quota Fissa Mensile</span> <span>9,00 €/mese</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>108,00 €</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Gas Annuo Medio</span> <span>34,44 €</span></li>
+                        <li><span>Tariffa Gas</span> <span id="lblGasPriceEni">0,4100 €/Smc</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span id="lblGasFixedEni">9,00 €/mese</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span id="lblGasFixedAnnEni">108,00 €</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Gas Annuo Medio</span> <span id="lblGasVarAnnEni">34,44 €</span></li>
                         <li class="real-only"><span>Costi Regolati e Tasse (Stima)</span> <span>206,59 €</span></li>
                     </ul>
                     <div class="comp-total-box">
@@ -754,14 +977,14 @@
                 </div>
 
                 <!-- Octopus Card -->
-                <div class="comp-card recommended">
-                    <span class="comp-card-badge">Più Conveniente</span>
+                <div class="comp-card recommended" id="cardGasOct">
+                    <span class="comp-card-badge" id="badgeGasOct">Più Conveniente</span>
                     <h4 class="comp-title">🐙 Octopus Energy</h4>
                     <ul class="comp-details-list">
-                        <li><span>Tariffa Gas</span> <span>0,4300 €/Smc</span></li>
-                        <li><span>Quota Fissa Mensile</span> <span>6,00 €/mese</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span>72,00 €</span></li>
-                        <li class="comp-only" style="display: none;"><span>Costo Gas Annuo Medio</span> <span>36,12 €</span></li>
+                        <li><span>Tariffa Gas</span> <span id="lblGasPriceOct">0,4300 €/Smc</span></li>
+                        <li><span>Quota Fissa Mensile</span> <span id="lblGasFixedOct">6,00 €/mese</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Fisso Annuo</span> <span id="lblGasFixedAnnOct">72,00 €</span></li>
+                        <li class="comp-only" style="display: none;"><span>Costo Gas Annuo Medio</span> <span id="lblGasVarAnnOct">36,12 €</span></li>
                         <li class="real-only"><span>Costi Regolati e Tasse (Stima)</span> <span>206,59 €</span></li>
                     </ul>
                     <div class="comp-total-box">
@@ -814,10 +1037,10 @@
 
                 <div class="formula-box gas-theme-border">
                     <div class="formula-title">Punto di Pareggio (Gas)</div>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <p id="lblBreakEvenGasText" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                         La tariffa Octopus (fissi bassi, smc leggermente più alto) conviene se consumi meno di 1.800 Smc/anno.
                     </p>
-                    <div class="formula-text">0.41 * x + 108 = 0.43 * x + 72<br>x = 1.800 Smc/anno</div>
+                    <div id="lblBreakEvenGasFormula" class="formula-text">0.41 * x + 108 = 0.43 * x + 72<br>x = 1.800 Smc/anno</div>
                 </div>
             </div>
         </div>
@@ -831,8 +1054,8 @@
                             <th>Anno</th>
                             <th>Periodo (Quadrimestrale)</th>
                             <th>Consumo (Smc)</th>
-                            <th>Eni (0.41€/Smc + 9€/m)</th>
-                            <th>Octopus (0.43€/Smc + 6€/m)</th>
+                            <th id="thGasEni">Eni (0.41€/Smc + 9€/m)</th>
+                            <th id="thGasOct">Octopus (0.43€/Smc + 6€/m)</th>
                             <th>Differenza (Eni - Octopus)</th>
                             <th>Esito conveniente</th>
                         </tr>
@@ -853,6 +1076,30 @@
     const REG_COST_GAS_QUAD = 206.59 / 3; // 68.86 per bill
     
     let currentMode = 'real'; // 'real' is default
+
+    // User editable offer parameters (initialized with standard values)
+    const offers = {
+        luce: {
+            eni: {
+                price: 0.0900,
+                fixed: 9.50
+            },
+            oct: {
+                price: 0.1188,
+                fixed: 6.00
+            }
+        },
+        gas: {
+            eni: {
+                price: 0.4100,
+                fixed: 9.00
+            },
+            oct: {
+                price: 0.4300,
+                fixed: 6.00
+            }
+        }
+    };
 
     // Real values for Luce
     const luceConsumi = [420, 463, 414, 405, 448, 452];
@@ -894,7 +1141,85 @@
         updateDashboard();
     }
 
-    // Refresh layout based on mode
+    // Handle user inputs change
+    function handleOfferChange() {
+        offers.luce.eni.price = parseFloat(document.getElementById('inputLucePriceEni').value) || 0;
+        offers.luce.eni.fixed = parseFloat(document.getElementById('inputLuceFixedEni').value) || 0;
+        offers.luce.oct.price = parseFloat(document.getElementById('inputLucePriceOct').value) || 0;
+        offers.luce.oct.fixed = parseFloat(document.getElementById('inputLuceFixedOct').value) || 0;
+        
+        offers.gas.eni.price = parseFloat(document.getElementById('inputGasPriceEni').value) || 0;
+        offers.gas.eni.fixed = parseFloat(document.getElementById('inputGasFixedEni').value) || 0;
+        offers.gas.oct.price = parseFloat(document.getElementById('inputGasPriceOct').value) || 0;
+        offers.gas.oct.fixed = parseFloat(document.getElementById('inputGasFixedOct').value) || 0;
+        
+        saveToLocalStorage();
+        updateDashboard();
+    }
+    
+    // Reset offers to default values
+    function resetOffers() {
+        document.getElementById('inputLucePriceEni').value = "0.0900";
+        document.getElementById('inputLuceFixedEni').value = "9.50";
+        document.getElementById('inputLucePriceOct').value = "0.1188";
+        document.getElementById('inputLuceFixedOct').value = "6.00";
+        
+        document.getElementById('inputGasPriceEni').value = "0.4100";
+        document.getElementById('inputGasFixedEni').value = "9.00";
+        document.getElementById('inputGasPriceOct').value = "0.4300";
+        document.getElementById('inputGasFixedOct').value = "6.00";
+        
+        localStorage.removeItem('confronto_bollette_offers');
+        
+        // Update local object and UI
+        offers.luce.eni.price = 0.0900;
+        offers.luce.eni.fixed = 9.50;
+        offers.luce.oct.price = 0.1188;
+        offers.luce.oct.fixed = 6.00;
+        
+        offers.gas.eni.price = 0.4100;
+        offers.gas.eni.fixed = 9.00;
+        offers.gas.oct.price = 0.4300;
+        offers.gas.oct.fixed = 6.00;
+        
+        updateDashboard();
+    }
+
+    // Save customized offers to localStorage
+    function saveToLocalStorage() {
+        localStorage.setItem('confronto_bollette_offers', JSON.stringify(offers));
+    }
+    
+    // Load custom offers from localStorage
+    function loadFromLocalStorage() {
+        const saved = localStorage.getItem('confronto_bollette_offers');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.luce && parsed.gas) {
+                    offers.luce.eni = parsed.luce.eni;
+                    offers.luce.oct = parsed.luce.oct;
+                    offers.gas.eni = parsed.gas.eni;
+                    offers.gas.oct = parsed.gas.oct;
+                    
+                    // Update input fields
+                    document.getElementById('inputLucePriceEni').value = offers.luce.eni.price;
+                    document.getElementById('inputLuceFixedEni').value = offers.luce.eni.fixed;
+                    document.getElementById('inputLucePriceOct').value = offers.luce.oct.price;
+                    document.getElementById('inputLuceFixedOct').value = offers.luce.oct.fixed;
+                    
+                    document.getElementById('inputGasPriceEni').value = offers.gas.eni.price;
+                    document.getElementById('inputGasFixedEni').value = offers.gas.eni.fixed;
+                    document.getElementById('inputGasPriceOct').value = offers.gas.oct.price;
+                    document.getElementById('inputGasFixedOct').value = offers.gas.oct.fixed;
+                }
+            } catch (e) {
+                console.error("Errore caricamento dati salvati", e);
+            }
+        }
+    }
+
+    // Refresh layout based on mode and custom rates
     function updateDashboard() {
         const isReal = currentMode === 'real';
         
@@ -908,43 +1233,200 @@
         const regLuceBim = isReal ? REG_COST_LUCE_BIM : 0;
         const regGasQuad = isReal ? REG_COST_GAS_QUAD : 0;
         
-        // 1. Luce Summary (Eni fixed is 9.5€/month, so 114€/year)
-        const luceEniTot = 348.18 + regLuce;
-        const luceOctTot = 381.12 + regLuce;
+        // --- 1. LUCE CALCULATIONS ---
+        const totalLuceConsumo = luceConsumi.reduce((a, b) => a + b, 0);
+        const luceEniComp = totalLuceConsumo * offers.luce.eni.price + offers.luce.eni.fixed * 12;
+        const luceOctComp = totalLuceConsumo * offers.luce.oct.price + offers.luce.oct.fixed * 12;
+        
+        const luceEniTot = luceEniComp + regLuce;
+        const luceOctTot = luceOctComp + regLuce;
+        
+        // Update direct parameter cards (Luce)
+        document.getElementById('lblLucePriceEni').innerText = offers.luce.eni.price.toFixed(4) + ' €/kWh';
+        document.getElementById('lblLuceFixedEni').innerText = offers.luce.eni.fixed.toFixed(2) + ' €/mese';
+        document.getElementById('lblLuceFixedAnnEni').innerText = (offers.luce.eni.fixed * 12).toFixed(2) + ' €';
+        document.getElementById('lblLuceVarAnnEni').innerText = (totalLuceConsumo * offers.luce.eni.price).toFixed(2) + ' €';
         document.getElementById('totLuceEni').innerText = luceEniTot.toFixed(2) + ' €';
+
+        document.getElementById('lblLucePriceOct').innerText = offers.luce.oct.price.toFixed(4) + ' €/kWh';
+        document.getElementById('lblLuceFixedOct').innerText = offers.luce.oct.fixed.toFixed(2) + ' €/mese';
+        document.getElementById('lblLuceFixedAnnOct').innerText = (offers.luce.oct.fixed * 12).toFixed(2) + ' €';
+        document.getElementById('lblLuceVarAnnOct').innerText = (totalLuceConsumo * offers.luce.oct.price).toFixed(2) + ' €';
         document.getElementById('totLuceOct').innerText = luceOctTot.toFixed(2) + ' €';
+        
+        // Update KPIs
         document.getElementById('kpiLuceEni').innerText = (luceEniTot / 12).toFixed(2) + ' €';
         document.getElementById('kpiLuceOct').innerText = (luceOctTot / 12).toFixed(2) + ' €';
         
-        // 2. Gas Summary
-        const gasEniTot = 142.44 + regGas;
-        const gasOctTot = 108.12 + regGas;
+        // Recommend Luce Provider
+        const eniLuceIsCheaper = luceEniComp < luceOctComp;
+        document.getElementById('cardLuceEni').classList.toggle('recommended', eniLuceIsCheaper);
+        document.getElementById('badgeLuceEni').style.display = eniLuceIsCheaper ? '' : 'none';
+        document.getElementById('cardLuceOct').classList.toggle('recommended', !eniLuceIsCheaper);
+        document.getElementById('badgeLuceOct').style.display = !eniLuceIsCheaper ? '' : 'none';
+        
+        // Update Table Headers
+        document.getElementById('thLuceEni').innerText = `Eni (${offers.luce.eni.price.toFixed(4)}€/kWh + ${offers.luce.eni.fixed.toFixed(2)}€/m)`;
+        document.getElementById('thLuceOct').innerText = `Octopus (${offers.luce.oct.price.toFixed(4)}€/kWh + ${offers.luce.oct.fixed.toFixed(2)}€/m)`;
+
+        // --- 2. GAS CALCULATIONS ---
+        const totalGasConsumo = gasConsumi.reduce((a, b) => a + b, 0);
+        const avgGasConsumo = totalGasConsumo / 2; // Average annual consumption (exactly 2 years of data)
+        const gasEniComp = avgGasConsumo * offers.gas.eni.price + offers.gas.eni.fixed * 12;
+        const gasOctComp = avgGasConsumo * offers.gas.oct.price + offers.gas.oct.fixed * 12;
+        
+        const gasEniTot = gasEniComp + regGas;
+        const gasOctTot = gasOctComp + regGas;
+        
+        // Update direct parameter cards (Gas)
+        document.getElementById('lblGasPriceEni').innerText = offers.gas.eni.price.toFixed(4) + ' €/Smc';
+        document.getElementById('lblGasFixedEni').innerText = offers.gas.eni.fixed.toFixed(2) + ' €/mese';
+        document.getElementById('lblGasFixedAnnEni').innerText = (offers.gas.eni.fixed * 12).toFixed(2) + ' €';
+        document.getElementById('lblGasVarAnnEni').innerText = (avgGasConsumo * offers.gas.eni.price).toFixed(2) + ' €';
         document.getElementById('totGasEni').innerText = gasEniTot.toFixed(2) + ' €';
+
+        document.getElementById('lblGasPriceOct').innerText = offers.gas.oct.price.toFixed(4) + ' €/Smc';
+        document.getElementById('lblGasFixedOct').innerText = offers.gas.oct.fixed.toFixed(2) + ' €/mese';
+        document.getElementById('lblGasFixedAnnOct').innerText = (offers.gas.oct.fixed * 12).toFixed(2) + ' €';
+        document.getElementById('lblGasVarAnnOct').innerText = (avgGasConsumo * offers.gas.oct.price).toFixed(2) + ' €';
         document.getElementById('totGasOct').innerText = gasOctTot.toFixed(2) + ' €';
+        
+        // Update KPIs
         document.getElementById('kpiGasEni').innerText = (gasEniTot / 12).toFixed(2) + ' €';
         document.getElementById('kpiGasOct').innerText = (gasOctTot / 12).toFixed(2) + ' €';
-
-        // 3. Package Grid Values
-        document.querySelectorAll('.val-luce-eni').forEach(el => el.innerText = (348.18 + regLuce).toFixed(2) + ' €/anno');
-        document.querySelectorAll('.val-luce-oct').forEach(el => el.innerText = (381.12 + regLuce).toFixed(2) + ' €/anno');
-        document.querySelectorAll('.val-gas-eni').forEach(el => el.innerText = (142.44 + regGas).toFixed(2) + ' €/anno');
-        document.querySelectorAll('.val-gas-oct').forEach(el => el.innerText = (108.12 + regGas).toFixed(2) + ' €/anno');
         
-        const totEni = 490.62 + regLuce + regGas;
-        const totOct = 489.24 + regLuce + regGas;
-        const totSplit = 456.30 + regLuce + regGas;
+        // Recommend Gas Provider
+        const eniGasIsCheaper = gasEniComp < gasOctComp;
+        document.getElementById('cardGasEni').classList.toggle('recommended', eniGasIsCheaper);
+        document.getElementById('badgeGasEni').style.display = eniGasIsCheaper ? '' : 'none';
+        document.getElementById('cardGasOct').classList.toggle('recommended', !eniGasIsCheaper);
+        document.getElementById('badgeGasOct').style.display = !eniGasIsCheaper ? '' : 'none';
+        
+        // Update Table Headers
+        document.getElementById('thGasEni').innerText = `Eni (${offers.gas.eni.price.toFixed(4)}€/Smc + ${offers.gas.eni.fixed.toFixed(2)}€/m)`;
+        document.getElementById('thGasOct').innerText = `Octopus (${offers.gas.oct.price.toFixed(4)}€/Smc + ${offers.gas.oct.fixed.toFixed(2)}€/m)`;
+
+        // --- 3. PACKAGE SUMMARY & CHEAPEST MISTY SETUP ---
+        const bestLuce = eniLuceIsCheaper
+            ? { name: 'Eni', cost: luceEniTot, color: 'var(--accent-luce)', cls: 'val-luce-eni' } 
+            : { name: 'Octopus', cost: luceOctTot, color: 'var(--accent-gas)', cls: 'val-luce-oct' };
+            
+        const bestGas = eniGasIsCheaper
+            ? { name: 'Eni', cost: gasEniTot, color: 'var(--accent-luce)', cls: 'val-gas-eni' } 
+            : { name: 'Octopus', cost: gasOctTot, color: 'var(--accent-gas)', cls: 'val-gas-oct' };
+
+        document.getElementById('splitLuceLabel').innerText = `Luce con ${bestLuce.name}`;
+        document.getElementById('splitLuceVal').innerText = bestLuce.cost.toFixed(2) + ' €/anno';
+        document.getElementById('splitLuceVal').style.color = bestLuce.color;
+        
+        document.getElementById('splitGasLabel').innerText = `Gas con ${bestGas.name}`;
+        document.getElementById('splitGasVal').innerText = bestGas.cost.toFixed(2) + ' €/anno';
+        document.getElementById('splitGasVal').style.color = bestGas.color;
+
+        // Apply classes to val spans in the package grid
+        document.querySelectorAll('.val-luce-eni').forEach(el => el.innerText = (luceEniComp + regLuce).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-luce-oct').forEach(el => el.innerText = (luceOctComp + regLuce).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-gas-eni').forEach(el => el.innerText = (gasEniComp + regGas).toFixed(2) + ' €/anno');
+        document.querySelectorAll('.val-gas-oct').forEach(el => el.innerText = (gasOctComp + regGas).toFixed(2) + ' €/anno');
+        
+        const totEni = luceEniTot + gasEniTot;
+        const totOct = luceOctTot + gasOctTot;
+        const totSplit = bestLuce.cost + bestGas.cost;
         
         document.getElementById('totEni').innerText = totEni.toFixed(2) + ' €';
         document.getElementById('totOct').innerText = totOct.toFixed(2) + ' €';
         document.getElementById('totSplit').innerText = totSplit.toFixed(2) + ' €';
         
-        // Package difference text
-        document.getElementById('subEni').innerText = `Differenza rispetto a Octopus: +${(totEni - totOct).toFixed(2)} €/anno`;
-        document.getElementById('subOct').innerText = `Differenza rispetto a Eni: ${(totOct - totEni).toFixed(2)} €/anno`;
-        document.getElementById('subSplit').innerText = `✨ Risparmio di ben ${(totEni - totSplit).toFixed(2)} €/anno rispetto a Eni e ${(totOct - totSplit).toFixed(2)} €/anno rispetto a Octopus!`;
+        // Package difference labels
+        const diffEniOct = totEni - totOct;
+        document.getElementById('subEni').innerText = `Differenza rispetto a Octopus: ${diffEniOct >= 0 ? '+' : ''}${diffEniOct.toFixed(2)} €/anno`;
+        document.getElementById('subOct').innerText = `Differenza rispetto a Eni: ${(-diffEniOct) >= 0 ? '+' : ''}${(-diffEniOct).toFixed(2)} €/anno`;
+        
+        const bestMono = Math.min(totEni, totOct);
+        const splitSavings = bestMono - totSplit;
+        
+        if (splitSavings > 0.01) {
+            document.getElementById('splitConfigBadge').innerText = 'Consigliata (Mista)';
+            document.getElementById('splitConfigBadge').style.background = 'rgba(168, 85, 247, 0.15)';
+            document.getElementById('splitConfigBadge').style.color = 'var(--accent-purple)';
+            document.getElementById('splitConfigBadge').style.borderColor = 'rgba(168, 85, 247, 0.3)';
+            document.getElementById('subSplit').innerText = `✨ Risparmio di ben ${splitSavings.toFixed(2)} €/anno rispetto alla migliore opzione Monogestore!`;
+        } else {
+            const winner = totEni < totOct ? 'Eni' : 'Octopus';
+            document.getElementById('splitConfigBadge').innerText = 'Non Necessaria';
+            document.getElementById('splitConfigBadge').style.background = 'rgba(255, 255, 255, 0.05)';
+            document.getElementById('splitConfigBadge').style.color = 'var(--text-secondary)';
+            document.getElementById('splitConfigBadge').style.borderColor = 'transparent';
+            document.getElementById('subSplit').innerText = `La configurazione mista non offre risparmio aggiuntivo rispetto a ${winner} Monogestore.`;
+        }
 
-        // 4. Tables Render
-        // Render Luce Table (Eni fixed is 9.5€/month, so 19€/bimestre)
+        // --- 4. BREAK-EVEN CALCULATIONS ---
+        // Break-even Luce
+        let breakEvenLuceText = '';
+        let breakEvenLuceFormula = '';
+        if (offers.luce.eni.price !== offers.luce.oct.price) {
+            const beLuce = (offers.luce.eni.fixed - offers.luce.oct.fixed) * 12 / (offers.luce.oct.price - offers.luce.eni.price);
+            if (beLuce > 0) {
+                const cheaperWho = offers.luce.eni.price < offers.luce.oct.price ? 'Eni' : 'Octopus';
+                breakEvenLuceText = `La tariffa ${cheaperWho} (quota fissa più alta, costo kWh inferiore) diventa più conveniente se consumi più di ${beLuce.toFixed(0)} kWh/anno.`;
+                breakEvenLuceFormula = `${offers.luce.eni.price.toFixed(4)} * x + ${(offers.luce.eni.fixed * 12).toFixed(2)} = ${offers.luce.oct.price.toFixed(4)} * x + ${(offers.luce.oct.fixed * 12).toFixed(2)}<br>x = ${beLuce.toFixed(2)} kWh/anno`;
+            } else {
+                const absoluteCheaper = (offers.luce.eni.price < offers.luce.oct.price && offers.luce.eni.fixed < offers.luce.oct.fixed) ? 'Eni' : (offers.luce.oct.price < offers.luce.eni.price && offers.luce.oct.fixed < offers.luce.oct.fixed) ? 'Octopus' : '';
+                if (absoluteCheaper) {
+                    breakEvenLuceText = `La tariffa ${absoluteCheaper} è sempre più conveniente in assoluto (ha sia la quota fissa che il prezzo al kWh più bassi).`;
+                    breakEvenLuceFormula = `Nessun punto di pareggio: ${absoluteCheaper} è sempre migliore.`;
+                } else {
+                    breakEvenLuceText = `Nessun punto di pareggio reale per consumi positivi.`;
+                    breakEvenLuceFormula = `x = ${beLuce.toFixed(2)} kWh/anno`;
+                }
+            }
+        } else {
+            if (offers.luce.eni.fixed === offers.luce.oct.fixed) {
+                breakEvenLuceText = 'Le due tariffe sono identiche.';
+                breakEvenLuceFormula = 'Tariffe equivalenti.';
+            } else {
+                const cheaper = offers.luce.eni.fixed < offers.luce.oct.fixed ? 'Eni' : 'Octopus';
+                breakEvenLuceText = `La tariffa ${cheaper} è sempre più conveniente poiché ha una quota fissa minore a parità di costo al kWh.`;
+                breakEvenLuceFormula = `Prezzi uguali (${offers.luce.eni.price.toFixed(4)} €/kWh). Fissi: Eni ${(offers.luce.eni.fixed * 12).toFixed(2)} €/anno, Octopus ${(offers.luce.oct.fixed * 12).toFixed(2)} €/anno.`;
+            }
+        }
+        document.getElementById('lblBreakEvenLuceText').innerText = breakEvenLuceText;
+        document.getElementById('lblBreakEvenLuceFormula').innerHTML = breakEvenLuceFormula;
+
+        // Break-even Gas
+        let breakEvenGasText = '';
+        let breakEvenGasFormula = '';
+        if (offers.gas.eni.price !== offers.gas.oct.price) {
+            const beGas = (offers.gas.eni.fixed - offers.gas.oct.fixed) * 12 / (offers.gas.oct.price - offers.gas.eni.price);
+            if (beGas > 0) {
+                const cheaperWho = offers.gas.eni.price < offers.gas.oct.price ? 'Eni' : 'Octopus';
+                breakEvenGasText = `La tariffa ${cheaperWho} (quota fissa più alta, costo Smc inferiore) diventa più conveniente se consumi più di ${beGas.toFixed(0)} Smc/anno.`;
+                breakEvenGasFormula = `${offers.gas.eni.price.toFixed(4)} * x + ${(offers.gas.eni.fixed * 12).toFixed(2)} = ${offers.gas.oct.price.toFixed(4)} * x + ${(offers.gas.oct.fixed * 12).toFixed(2)}<br>x = ${beGas.toFixed(2)} Smc/anno`;
+            } else {
+                const absoluteCheaper = (offers.gas.eni.price < offers.gas.oct.price && offers.gas.eni.fixed < offers.gas.oct.fixed) ? 'Eni' : (offers.gas.oct.price < offers.gas.eni.price && offers.gas.oct.fixed < offers.gas.oct.fixed) ? 'Octopus' : '';
+                if (absoluteCheaper) {
+                    breakEvenGasText = `La tariffa ${absoluteCheaper} è sempre più conveniente in assoluto (ha sia la quota fissa che il prezzo al Smc più bassi).`;
+                    breakEvenGasFormula = `Nessun punto di pareggio: ${absoluteCheaper} è sempre migliore.`;
+                } else {
+                    breakEvenGasText = `Nessun punto di pareggio reale per consumi positivi.`;
+                    breakEvenGasFormula = `x = ${beGas.toFixed(2)} Smc/anno`;
+                }
+            }
+        } else {
+            if (offers.gas.eni.fixed === offers.gas.oct.fixed) {
+                breakEvenGasText = 'Le due tariffe sono identiche.';
+                breakEvenGasFormula = 'Tariffe equivalenti.';
+            } else {
+                const cheaper = offers.gas.eni.fixed < offers.gas.oct.fixed ? 'Eni' : 'Octopus';
+                breakEvenGasText = `La tariffa ${cheaper} è sempre più conveniente poiché ha una quota fissa minore a parità di costo al Smc.`;
+                breakEvenGasFormula = `Prezzi uguali (${offers.gas.eni.price.toFixed(4)} €/Smc). Fissi: Eni ${(offers.gas.eni.fixed * 12).toFixed(2)} €/anno, Octopus ${(offers.gas.oct.fixed * 12).toFixed(2)} €/anno.`;
+            }
+        }
+        document.getElementById('lblBreakEvenGasText').innerText = breakEvenGasText;
+        document.getElementById('lblBreakEvenGasFormula').innerHTML = breakEvenGasFormula;
+
+        // --- 5. TABLES RENDER ---
+        // Render Luce Table
         const tbodyLuce = document.querySelector('#tableLuce tbody');
         tbodyLuce.innerHTML = '';
         let sumConsumi = 0;
@@ -953,8 +1435,8 @@
         
         for (let i = 0; i < luceConsumi.length; i++) {
             const kwh = luceConsumi[i];
-            const costA = kwh * 0.09 + 9.5 * 2 + regLuceBim;
-            const costB = kwh * 0.1188 + 6 * 2 + regLuceBim;
+            const costA = kwh * offers.luce.eni.price + offers.luce.eni.fixed * 2 + regLuceBim;
+            const costB = kwh * offers.luce.oct.price + offers.luce.oct.fixed * 2 + regLuceBim;
             const diff = costA - costB;
             sumConsumi += kwh;
             sumA += costA;
@@ -966,7 +1448,7 @@
                     <td>${kwh} kWh</td>
                     <td>${costA.toFixed(2)} €</td>
                     <td>${costB.toFixed(2)} €</td>
-                    <td class="${diff < 0 ? 'text-green' : 'text-red'}">${diff.toFixed(2)} €</td>
+                    <td class="${diff < 0 ? 'text-green' : 'text-red'}">${diff > 0 ? '+' : ''}${diff.toFixed(2)} €</td>
                     <td><span class="recommendation-badge">${costA < costB ? 'Eni' : 'Octopus'}</span></td>
                 </tr>
             `;
@@ -977,8 +1459,8 @@
                 <td>${sumConsumi} kWh</td>
                 <td>${sumA.toFixed(2)} €</td>
                 <td>${sumB.toFixed(2)} €</td>
-                <td class="text-green">${(sumA - sumB).toFixed(2)} €</td>
-                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Eni</span></td>
+                <td class="${(sumA - sumB) < 0 ? 'text-green' : 'text-red'}">${(sumA - sumB) > 0 ? '+' : ''}${(sumA - sumB).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">${sumA < sumB ? 'Eni' : 'Octopus'}</span></td>
             </tr>
         `;
 
@@ -990,8 +1472,8 @@
         
         for (let i = 0; i < gasPeriods.length; i++) {
             const gp = gasPeriods[i];
-            const costA = gp.smc * 0.41 + 9 * 4 + regGasQuad;
-            const costB = gp.smc * 0.43 + 6 * 4 + regGasQuad;
+            const costA = gp.smc * offers.gas.eni.price + offers.gas.eni.fixed * 4 + regGasQuad;
+            const costB = gp.smc * offers.gas.oct.price + offers.gas.oct.fixed * 4 + regGasQuad;
             const diff = costA - costB;
             
             if (gp.anno === 'Anno 1') {
@@ -1025,8 +1507,8 @@
                 <td>${sumGas1} Smc</td>
                 <td>${sumGasA1.toFixed(2)} €</td>
                 <td>${sumGasB1.toFixed(2)} €</td>
-                <td class="text-red">+${(sumGasA1 - sumGasB1).toFixed(2)} €</td>
-                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Octopus</span></td>
+                <td class="${(sumGasA1 - sumGasB1) < 0 ? 'text-green' : 'text-red'}">${(sumGasA1 - sumGasB1) > 0 ? '+' : ''}${(sumGasA1 - sumGasB1).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">${sumGasA1 < sumGasB1 ? 'Eni' : 'Octopus'}</span></td>
             </tr>
             <tr class="font-bold gas-row-year2" style="background: rgba(255,255,255,0.02)">
                 <td>Totale Anno 2</td>
@@ -1034,15 +1516,17 @@
                 <td>${sumGas2} Smc</td>
                 <td>${sumGasA2.toFixed(2)} €</td>
                 <td>${sumGasB2.toFixed(2)} €</td>
-                <td class="text-red">+${(sumGasA2 - sumGasB2).toFixed(2)} €</td>
-                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">Octopus</span></td>
+                <td class="${(sumGasA2 - sumGasB2) < 0 ? 'text-green' : 'text-red'}">${(sumGasA2 - sumGasB2) > 0 ? '+' : ''}${(sumGasA2 - sumGasB2).toFixed(2)} €</td>
+                <td><span class="recommendation-badge" style="background: var(--accent-green); color: #0b0f19;">${sumGasA2 < sumGasB2 ? 'Eni' : 'Octopus'}</span></td>
             </tr>
         `;
 
-        // Update Charts data
-        // Luce Chart (Eni is 9.5€/month fixed, so 19€/bimestre)
-        luceChart.data.datasets[0].data = luceConsumi.map(kwh => kwh * 0.09 + 9.5 * 2 + regLuceBim);
-        luceChart.data.datasets[1].data = luceConsumi.map(kwh => kwh * 0.1188 + 6 * 2 + regLuceBim);
+        // Update Charts
+        // Luce Chart dataset updates
+        luceChart.data.datasets[0].label = `Eni (${offers.luce.eni.price.toFixed(4)}€/kWh + ${offers.luce.eni.fixed.toFixed(2)}€/m)`;
+        luceChart.data.datasets[1].label = `Octopus (${offers.luce.oct.price.toFixed(4)}€/kWh + ${offers.luce.oct.fixed.toFixed(2)}€/m)`;
+        luceChart.data.datasets[0].data = luceConsumi.map(kwh => kwh * offers.luce.eni.price + offers.luce.eni.fixed * 2 + regLuceBim);
+        luceChart.data.datasets[1].data = luceConsumi.map(kwh => kwh * offers.luce.oct.price + offers.luce.oct.fixed * 2 + regLuceBim);
         luceChart.update();
 
         // Gas Chart
@@ -1061,7 +1545,7 @@
             labels: luceBimestri,
             datasets: [
                 {
-                    label: 'Eni (0.09€/kWh + 9.5€/mese)',
+                    label: 'Eni',
                     data: [],
                     backgroundColor: 'rgba(0, 242, 254, 0.6)',
                     borderColor: 'rgba(0, 242, 254, 1)',
@@ -1069,7 +1553,7 @@
                     borderRadius: 5,
                 },
                 {
-                    label: 'Octopus (0.1188€/kWh + 6€/mese)',
+                    label: 'Octopus',
                     data: [],
                     backgroundColor: 'rgba(239, 68, 68, 0.4)',
                     borderColor: 'rgba(239, 68, 68, 0.8)',
@@ -1112,7 +1596,7 @@
             labels: gasLabelsAll,
             datasets: [
                 {
-                    label: 'Eni (0.41€/Smc + 9€/mese)',
+                    label: 'Eni',
                     data: [],
                     backgroundColor: 'rgba(239, 68, 68, 0.4)',
                     borderColor: 'rgba(239, 68, 68, 0.8)',
@@ -1120,7 +1604,7 @@
                     borderRadius: 5,
                 },
                 {
-                    label: 'Octopus (0.43€/Smc + 6€/mese)',
+                    label: 'Octopus',
                     data: [],
                     backgroundColor: 'rgba(255, 153, 0, 0.6)',
                     borderColor: 'rgba(255, 153, 0, 1)',
@@ -1163,8 +1647,11 @@
         const isReal = currentMode === 'real';
         const regGasQuad = isReal ? REG_COST_GAS_QUAD : 0;
         
-        const gasDataA = gasConsumi.map(smc => smc * 0.41 + 9 * 4 + regGasQuad);
-        const gasDataB = gasConsumi.map(smc => smc * 0.43 + 6 * 4 + regGasQuad);
+        const gasDataA = gasConsumi.map(smc => smc * offers.gas.eni.price + offers.gas.eni.fixed * 4 + regGasQuad);
+        const gasDataB = gasConsumi.map(smc => smc * offers.gas.oct.price + offers.gas.oct.fixed * 4 + regGasQuad);
+
+        gasChart.data.datasets[0].label = `Eni (${offers.gas.eni.price.toFixed(4)}€/Smc + ${offers.gas.eni.fixed.toFixed(2)}€/m)`;
+        gasChart.data.datasets[1].label = `Octopus (${offers.gas.oct.price.toFixed(4)}€/Smc + ${offers.gas.oct.fixed.toFixed(2)}€/m)`;
 
         if (val === 'all') {
             gasChart.data.labels = gasLabelsAll;
@@ -1189,6 +1676,7 @@
     }
 
     // Initialize Dashboard
+    loadFromLocalStorage();
     updateDashboard();
 </script>
 </body>
